@@ -1,13 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
 #include <SDL2/SDL.h>
 
 #include "def.h"
 
 void on_except(const char *where, const char *reason) {
-    printf("EXCEPTION [%s] %s\n", where, reason);
+    SDL_Log("EXCEPTION [%s] %s\n", where, reason);
 }
 
 #define THROW(REASON) on_except("main", REASON);
@@ -40,7 +36,7 @@ int main(void) {
 
     SDL_LockSurface(bs);
     
-    uint8_t *pix = bs->pixels; 
+    Uint8 *pix = bs->pixels; 
 
     *(pix + 200 + 0) = 1;
     *(pix + 200 + 1) = 1;
