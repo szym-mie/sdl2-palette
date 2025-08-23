@@ -1,8 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 
 #include <SDL2/SDL.h>
 
 #include "def.h"
+
+void on_except(const char *where, const char *reason) {
+    printf("EXCEPTION [%s] %s\n", where, reason);
+}
 
 #define THROW(REASON) on_except("main", REASON);
 
