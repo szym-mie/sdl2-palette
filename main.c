@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 
 #include "def.h"
+#include "triangle.h"
 
 void on_except(const char *where, const char *reason) {
     SDL_Log("EXCEPTION [%s] %s\n", where, reason);
@@ -36,43 +37,8 @@ int main(void) {
 
     SDL_LockSurface(bs);
     
-    Uint8 *pix = bs->pixels; 
-
-    *(pix + 200 + 0) = 1;
-    *(pix + 200 + 1) = 1;
-    *(pix + 200 + 2) = 1;
-    *(pix + 200 + 3) = 1;
-    *(pix + 200 + 4) = 1;
-    *(pix + 200 + 5) = 1;
-    *(pix + 200 + 6) = 1;
-    *(pix + 200 + 7) = 1;
-
-    *(pix + 400 + 0) = 2;
-    *(pix + 400 + 1) = 1;
-    *(pix + 400 + 2) = 2;
-    *(pix + 400 + 3) = 1;
-    *(pix + 400 + 4) = 2;
-    *(pix + 400 + 5) = 1;
-    *(pix + 400 + 6) = 2;
-    *(pix + 400 + 7) = 1;
-
-    *(pix + 600 + 0) = 2;
-    *(pix + 600 + 1) = 2;
-    *(pix + 600 + 2) = 2;
-    *(pix + 600 + 3) = 2;
-    *(pix + 600 + 4) = 2;
-    *(pix + 600 + 5) = 2;
-    *(pix + 600 + 6) = 2;
-    *(pix + 600 + 7) = 2;
-
-    *(pix + 800 + 0) = 3;
-    *(pix + 800 + 1) = 2;
-    *(pix + 800 + 2) = 3;
-    *(pix + 800 + 3) = 2;
-    *(pix + 800 + 4) = 3;
-    *(pix + 800 + 5) = 2;
-    *(pix + 800 + 6) = 3;
-    *(pix + 800 + 7) = 2;
+    BX_Face face = { { 16, 0, 0 }, { 0, 32, 0 }, { 32, 32, 0 } };
+    BX_DrawFace(bs, &face, 1);
 
     SDL_UnlockSurface(bs);
 
