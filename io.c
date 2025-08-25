@@ -23,15 +23,15 @@ int IO_SkipSpace(IO_Stream *stream) {
     return 0;
 }
 
-int IO_ReadLiteral(IO_Stream *stream, const char *literal) {
+int IO_ReadLiteral(IO_Stream *stream, char *literal) {
     char *t;
-    for (t = literal; t != '\0'; t++) {
+    for (t = literal; *t != '\0'; t++) {
         char c = SDL_ReadU8(stream);
         if (c == '\0')  {
             IO_Log("IO_ReadLiteral: EOF at pos %d\n", IO_Offset(stream));
             return 1;
         }
-        if (t != c) {
+        if (*t != c) {
             IO_Log("IO_ReadLiteral: bad char at pos %d\n", IO_Offset(stream));
             return 2;
         }

@@ -30,7 +30,7 @@ int BX_ReadGeometry(BX_Geometry *geometry, const char *file) {
         IO_TRY(IO_SkipSpace(io), 3);
         IO_TRY(IO_ReadS32(io, &face->vc.z), 3);
         IO_TRY(IO_SkipSpace(io), 3);
-        IO_TRY(IO_ReadU8(io, &geometry->colors[i], 3);
+        IO_TRY(IO_ReadU8(io, &geometry->colors[i]), 3);
     }
     IO_QuitStream(io);
     return 0;
