@@ -37,7 +37,7 @@ Sint32 BX_GetEdgeRegion(const BX_Vec3 *p, const BX_Vec3 *u, const BX_Vec3 *v) {
 #define EDGE(P, V, XD, YD) DX(V, P) * YD - DY(V, P) * XD
 
 void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color) {
-    BX_Vec3 *vt;
+    const BX_Vec3 *vt;
     if (face->va.y > face->vb.y)
         vt = face->va.y > face->vc.y ? &face->va : &face->vc;
     else
@@ -57,9 +57,9 @@ void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color) {
     for (;;) {
         if (erab <= 0 || erbc <= 0 || erca <= 0) break;
         *(pix + off) = color;
-        off += row;
-        erab -= dxab;
-        erbc -= dxbc;
-        erca -= dxca;
+        off -= row;
+        erab += dxab;
+        erbc += dxbc;
+        erca += dxca;
     }
 }

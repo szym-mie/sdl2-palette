@@ -24,6 +24,6 @@ typedef struct {
 } BX_Geometry;
 
 int BX_ReadGeometry(BX_Geometry *geometry, const char *file);
-void BX_DrawFace(SDL_Surface *surface, BX_Face *face, BX_Color color);
+void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color);
 
 #endif /* _TRIANGLE_H_ */

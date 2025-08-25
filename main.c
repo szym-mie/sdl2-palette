@@ -37,7 +37,7 @@ int main(void) {
 
     SDL_LockSurface(bs);
     
-    BX_Face face = { { 16, 0, 0 }, { 0, 32, 0 }, { 32, 32, 0 } };
+    BX_Face face = { { 8, 8, 0 }, { 24, 40, 0 }, { 40, 8, 0 } };
     BX_DrawFace(bs, &face, 1);
 
     SDL_UnlockSurface(bs);
