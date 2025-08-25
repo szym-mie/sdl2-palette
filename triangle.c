@@ -47,10 +47,10 @@ Sint32 BX_GetEdgeRegion(const BX_Vec3 *p, const BX_Vec3 *u, const BX_Vec3 *v) {
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 
-void BX_DrawGeometry(const BX_Geometry *geometry) {
+void BX_DrawGeometry(SDL_Surface *surface, const BX_Geometry *geometry) {
     Uint8 i;
     for (i = 0; i < geometry->size; i++)
-        BX_DrawFace(&geometry->faces[i], geometry->colors[i]);
+        BX_DrawFace(surface, &geometry->faces[i], geometry->colors[i]);
 }
 
 void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color) {
