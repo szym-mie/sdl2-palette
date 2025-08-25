@@ -55,7 +55,7 @@ int IO_ReadU8(IO_Stream *stream, Uint8 *value) {
         IO_Log("IO_ReadU8: EOF at pos %d\n", IO_Offset(stream));
         return 1;
     }
-    if (IS_HEX(cu) || IS_HEX(cl)) {
+    if (!IS_HEX(cu) || !IS_HEX(cl)) {
         IO_Log("IO_ReadU8: bad hex at pos %d\n", IO_Offset(stream));
         return 2;
     }

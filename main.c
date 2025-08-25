@@ -39,7 +39,7 @@ int main(void) {
     
     BX_Geometry geom;
     BX_ReadGeometry(&geom, "2tri.geom");
-    BX_DrawGeometry(&geom);
+    BX_DrawGeometry(bs, &geom);
 
     SDL_UnlockSurface(bs);
 
