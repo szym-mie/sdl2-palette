@@ -55,7 +55,7 @@ void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color) {
     Uint32 row = surface->w;
     Uint32 off = vt->x + vt->y * row;
     for (;;) {
-        if (erab <= 0 || erbc <= 0 || erca <= 0) break;
+        if (erab < 0 || erbc < 0 || erca < 0) break;
         *(pix + off) = color;
         off -= row;
         erab += dxab;
