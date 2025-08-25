@@ -37,8 +37,9 @@ int main(void) {
 
     SDL_LockSurface(bs);
     
-    BX_Face face = { { 8, 8, 0 }, { 24, 40, 0 }, { 40, 8, 0 } };
-    BX_DrawFace(bs, &face, 1);
+    BX_Geometry geom;
+    BX_ReadGeometry(&geom, "2tri.geom");
+    BX_DrawGeometry(&geom);
 
     SDL_UnlockSurface(bs);
 

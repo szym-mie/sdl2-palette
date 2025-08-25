@@ -3,6 +3,10 @@
 
 #include <SDL2/SDL.h>
 
+#include "io.h"
+
+#define BX_MAX_FACES 192
+
 typedef struct {
     Sint32 x;
     Sint32 y;
@@ -18,12 +22,13 @@ typedef struct {
 typedef Uint8 BX_Color;
 
 typedef struct {
-    BX_Face faces[192];
-    BX_Color colors[192];
+    BX_Face faces[BX_MAX_FACES];
+    BX_Color colors[BX_MAX_FACES];
     Uint32 size;
 } BX_Geometry;
 
 int BX_ReadGeometry(BX_Geometry *geometry, const char *file);
+void BX_DrawGeometry(const BX_Geometry *geometry);
 void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color);
 
 #endif /* _TRIANGLE_H_ */
