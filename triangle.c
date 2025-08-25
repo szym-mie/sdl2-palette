@@ -36,30 +36,49 @@ Sint32 BX_GetEdgeRegion(const BX_Vec3 *p, const BX_Vec3 *u, const BX_Vec3 *v) {
 #define DY(U, V) ((V).y - (U).y)
 #define EDGE(P, V, XD, YD) DX(V, P) * YD - DY(V, P) * XD
 
+#define MAX(A, B) ((A) > (B) ? (A) : (B))
+#define MIN(A, B) ((A) < (B) ? (A) : (B))
+
 void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color) {
-    const BX_Vec3 *vt;
-    if (face->va.y > face->vb.y)
-        vt = face->va.y > face->vc.y ? &face->va : &face->vc;
-    else
-        vt = face->vb.y > face->vc.y ? &face->vb : &face->vc;
+    Sint32 xl = MIN(MIN(face->va.x, face->vb.x), face->vc.x);
+    Sint32 xu = MAX(MAX(face->va.x, face->vb.x), face->vc.x);
+    Sint32 yl = MIN(MIN(face->va.y, face->vb.y), face->vc.y);
+    Sint32 yu = MAX(MAX(face->va.y, face->vb.y), face->vc.y);
+    BX_Vec3 vl = { xl, yl, 0 };
+
     Sint32 dxab = DX(face->va, face->vb);
     Sint32 dyab = DY(face->va, face->vb);
     Sint32 dxbc = DX(face->vb, face->vc);
     Sint32 dybc = DY(face->vb, face->vc);
     Sint32 dxca = DX(face->vc, face->va);
     Sint32 dyca = DY(face->vc, face->va);
-    Sint32 erab = EDGE(*vt, face->va, dxab, dyab);
-    Sint32 erbc = EDGE(*vt, face->vb, dxbc, dybc);
-    Sint32 erca = EDGE(*vt, face->vc, dxca, dyca);
+
+    Sint32 erab = EDGE(vl, face->va, dxab, dyab);
+    Sint32 erbc = EDGE(vl, face->vb, dxbc, dybc);
+    Sint32 erca = EDGE(vl, face->vc, dxca, dyca);
+    Sint32 herab = erab;
+    Sint32 herbc = erbc;
+    Sint32 herca = erca;
+
     Uint8 *pix = surface->pixels; 
-    Uint32 row = surface->w;
-    Uint32 off = vt->x + vt->y * row;
-    for (;;) {
-        if (erab < 0 || erbc < 0 || erca < 0) break;
-        *(pix + off) = color;
-        off -= row;
-        erab += dxab;
-        erbc += dxbc;
-        erca += dxca;
+    Uint32 pitch = surface->w;
+    Uint32 row = pitch * yl;
+    Sint32 x, y;
+
+    for (y = yl; y <= yu; y++) {
+        for (x = xl; x <= xu; x++) {
+            if (erab < 0 || erbc < 0 || erca < 0) continue;
+            *(pix + row + x) = color;
+            erab += dyab;
+            erbc += dybc;
+            erca += dyca;
+        }
+        herab += dxab;
+        herbc += dxbc;
+        herca += dxca;
+        erab = herab;
+        erbc = herbc;
+        erca = herca;
+        row += pitch;
     }
 }
