@@ -87,9 +87,9 @@ void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color) {
             erbc += dybc;
             erca += dyca;
         }
-        herab += dxab;
-        herbc += dxbc;
-        herca += dxca;
+        herab -= dxab;
+        herbc -= dxbc;
+        herca -= dxca;
         erab = herab;
         erbc = herbc;
         erca = herca;
