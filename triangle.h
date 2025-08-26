@@ -8,23 +8,23 @@
 #define BX_MAX_FACES 192
 
 typedef struct {
-    Sint32 x;
-    Sint32 y;
-    Sint32 z;
+  Sint32 x;
+  Sint32 y;
+  Sint32 z;
 } BX_Vec3;
 
 typedef struct {
-    BX_Vec3 va;
-    BX_Vec3 vb;
-    BX_Vec3 vc;
+  BX_Vec3 va;
+  BX_Vec3 vb;
+  BX_Vec3 vc;
 } BX_Face;
 
 typedef Uint8 BX_Color;
 
 typedef struct {
-    BX_Face faces[BX_MAX_FACES];
-    BX_Color colors[BX_MAX_FACES];
-    Uint32 size;
+  BX_Face faces[BX_MAX_FACES];
+  BX_Color colors[BX_MAX_FACES];
+  Uint32 size;
 } BX_Geometry;
 
 int BX_ReadGeometry(BX_Geometry *geometry, const char *file);

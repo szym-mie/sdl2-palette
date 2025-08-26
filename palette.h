@@ -1,4 +1,4 @@
-#define _PALETTE_H_
+#ifndef _PALETTE_H_
 #define _PALETTE_H_
 
 #include <SDL2/SDL.h>

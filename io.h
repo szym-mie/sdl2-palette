@@ -7,7 +7,9 @@ typedef SDL_RWops IO_Stream;
 
 #define IO_Log SDL_Log
 
-#define IO_TRY(OPER, EXCEPT) if (OPER) return EXCEPT
+#define IO_TRY(OPER, EXCEPT)                                                   \
+  if (OPER)                                                                    \
+  return EXCEPT
 
 IO_Stream *IO_ReadStream(const char *file);
 int IO_SkipSpace(IO_Stream *stream);
