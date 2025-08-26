@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_surface.h>
 
 #include "def.h"
@@ -23,31 +24,47 @@ int main(void) {
     return 2;
   }
 
-  SDL_Surface *bs = SDL_CreateRGBSurface(0, APP_SIZE, 8, 0, 0, 0, 0);
-  if (bs == NULL) {
+  SDL_Surface *pb = SDL_CreateRGBSurface(0, APP_SIZE, 8, 0, 0, 0, 0);
+  if (pb == NULL) {
     THROW("buffer surface init failed")
     return 3;
   }
 
-  if (BX_ReadPalette(bs->format->palette, "4col.palt")) {
+  if (BX_ReadPalette(pb->format->palette, "4col.palt")) {
     THROW("pallete read failed")
     return 4;
   }
 
-  BX_Geometry geom;
-  if (BX_ReadGeometry(&geom, "2tri.geom")) {
+  BX_Geometry rgeom;
+  BX_Geometry wgeom;
+  BX_Mat3 rotm;
+  /*
+   = {{57513, 0, 31419},
+                  {0, 65536, 0},
+                  {
+                      -31419,
+                      0,
+                      57513,
+                  }};
+  */
+  if (BX_ReadGeometry(&rgeom, "2tri.geom")) {
     THROW("geometry read failed")
     return 5;
   }
+  BX_CopyGeometry(&wgeom, &rgeom);
 
-  SDL_LockSurface(bs);
-  BX_DrawGeometry(bs, &geom);
-  SDL_UnlockSurface(bs);
-
-  SDL_UpperBlit(bs, NULL, SDL_GetWindowSurface(win), NULL);
-  SDL_UpdateWindowSurface(win);
-
-  SDL_Delay(2000);
+  Uint32 angle;
+  for (angle = 0; angle < 90; angle++) {
+    BX_SetRotYToMat3(&rotm, angle);
+    BX_TransformGeometry(&wgeom, &rgeom, &rotm);
+    SDL_LockSurface(pb);
+    BX_DrawGeometry(pb, &wgeom);
+    SDL_UnlockSurface(pb);
+    SDL_UpperBlit(pb, NULL, SDL_GetWindowSurface(win), NULL);
+    SDL_UpdateWindowSurface(win);
+    SDL_Delay(100);
+    SDL_FillRect(pb, NULL, 0);
+  }
 
   SDL_Quit();
 

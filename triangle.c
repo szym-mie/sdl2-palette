@@ -1,5 +1,49 @@
 #include "triangle.h"
+#include "fixed.h"
 #include "io.h"
+#include <SDL2/SDL_stdinc.h>
+
+#define DOT(U, V)                                                              \
+  (SFIX32_MUL((U).x, (V).x) + SFIX32_MUL((U).y, (V).y) +                       \
+   SFIX32_MUL((U).z, (V).z))
+
+void BX_SetRotYToMat3(BX_Mat3 *m, Sint32 angle) {
+  Sfix32 c = SFIX32_COS(angle);
+  Sfix32 s = SFIX32_SIN(angle);
+  m->rx.x = c;
+  m->rx.y = 0;
+  m->rx.z = s;
+  m->ry.x = 0;
+  m->ry.y = SFIX32(1, 0);
+  m->ry.z = 0;
+  m->rz.x = -s;
+  m->rz.y = 0;
+  m->rz.z = c;
+}
+
+void BX_TransformVec3(BX_Vec3 *vt, const BX_Vec3 *vs, const BX_Mat3 *m) {
+  Sint32 x = DOT(*vs, m->rx);
+  Sint32 y = DOT(*vs, m->ry);
+  Sint32 z = DOT(*vs, m->rz);
+  vt->x = x;
+  vt->y = y;
+  vt->z = z;
+}
+
+void BX_CopyVec3(BX_Vec3 *vt, const BX_Vec3 *vs) {
+  vt->x = vs->x;
+  vt->y = vs->y;
+  vt->z = vs->z;
+}
+
+void BX_TransformGeometry(BX_Geometry *gt, BX_Geometry *gs, const BX_Mat3 *m) {
+  Uint8 i;
+  for (i = 0; i < gs->size; i++) {
+    BX_TransformVec3(&gt->faces[i].va, &gs->faces[i].va, m);
+    BX_TransformVec3(&gt->faces[i].vb, &gs->faces[i].vb, m);
+    BX_TransformVec3(&gt->faces[i].vc, &gs->faces[i].vc, m);
+  }
+}
 
 int BX_ReadGeometry(BX_Geometry *geometry, const char *file) {
   IO_Stream *io = IO_ReadStream(file);
@@ -37,6 +81,17 @@ int BX_ReadGeometry(BX_Geometry *geometry, const char *file) {
   }
   IO_QuitStream(io);
   return 0;
+}
+
+void BX_CopyGeometry(BX_Geometry *gt, BX_Geometry *gs) {
+  Uint8 i;
+  gt->size = gs->size;
+  for (i = 0; i < gs->size; i++) {
+    BX_CopyVec3(&gt->faces[i].va, &gs->faces[i].va);
+    BX_CopyVec3(&gt->faces[i].vb, &gs->faces[i].vb);
+    BX_CopyVec3(&gt->faces[i].vc, &gs->faces[i].vc);
+    gt->colors[i] = gs->colors[i];
+  }
 }
 
 Sint32 BX_GetEdgeRegion(const BX_Vec3 *p, const BX_Vec3 *u, const BX_Vec3 *v) {
@@ -82,11 +137,11 @@ void BX_DrawFace(SDL_Surface *surface, const BX_Face *face, BX_Color color) {
   Uint32 row = pitch * yl;
   Sint32 x, y;
 
-  IO_Log("f %p\n", face);
-  IO_Log("dx %d %d %d\n", dxab, dxbc, dxca);
-  IO_Log("dy %d %d %d\n", dyab, dybc, dyca);
+  // IO_Log("f %p\n", face);
+  // IO_Log("dx %d %d %d\n", dxab, dxbc, dxca);
+  // IO_Log("dy %d %d %d\n", dyab, dybc, dyca);
   for (y = yl; y <= yu; y++) {
-    IO_Log("%d %d %d\n", erab, erbc, erca);
+    // IO_Log("%d %d %d\n", erab, erbc, erca);
     for (x = xl; x <= xu; x++) {
       if (erab >= 0 && erbc >= 0 && erca >= 0)
         *(pix + row + x) = color;
